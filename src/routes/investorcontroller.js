@@ -2,6 +2,7 @@ const Investor = require('../model/investordb');
 const express = require('express');
 const generateHash = require('../utils/generatehash');
 const bcrypt = require('bcrypt');
+const { v4: uuidv4 } = require("uuid");
 
 const route = express.Router();
 
@@ -9,6 +10,7 @@ route.post('/register', (req, res) => {
     generateHash(req.body.password)
     .then((password) => {
         req.body.password = password;
+        req.body.apikey = uuidv4();
         Investor(req.body)
             .save()
             .then((result) => {
