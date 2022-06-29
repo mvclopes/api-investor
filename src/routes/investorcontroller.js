@@ -42,4 +42,28 @@ route.post('/login', (req, res) => {
     });
 });
 
+route.put('/update-password/:id', (req, res) => {
+    generateHash(req.body.password)
+        .then((encryptedPassword) => {
+            req.body.password = encryptedPassword;
+            Investor.findOneAndUpdate(req.body.id, req.body, (err, result) => {
+                if (err)
+                    return res.status(500).send(`Error to find investor: ${err.message}`);
+                if (!result) 
+                    return res.status(400).send('Error to update password');
+                
+                return res.status(202).send('Updated password');
+            });
+        })
+        .catch((err) => {
+            res.status(500).send(`Error to generate password hash: ${err.message}`);
+        });
+});
+
+route.get('/investors', (req, res) => {
+    Investor.find()
+    .then((result) => {res.status(200).send({output: result})})
+    .catch((err) => {res.status(500).send(err.message)});
+});
+
 module.exports = route;
