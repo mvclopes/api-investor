@@ -5,7 +5,8 @@ const schema = new mongoose.Schema({
     email: {type:String, required:true, unique:true},
     password: {type:String, required:true},
     fullname: {type:String, required:true, unique:true},
-    telephone: {type:String},    
+    telephone: {type:String}, 
+    apikey: {type:String, required:true, unique:true},
     dateregister: {type:String, default:Date.now},
 });
 
