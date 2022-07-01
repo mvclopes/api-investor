@@ -4,6 +4,8 @@ const generateHash = require('../utils/generatehash');
 const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require("uuid");
 const clientBankInfo = require('../client/bankinfo');
+const auth = require('../middleware/auth');
+const createUserToken = require('../utils/createtoken');
 
 const route = express.Router();
 
@@ -34,7 +36,7 @@ route.post('/login', (req, res) => {
         bcrypt.compare(req.body.password, investor.password, (err, same) => {
             if (err) return res.status(500).send(`Error to validate password: ${err.message}`);
             if (!same) return res.status(500).send('Invalid password');
-            
+
             clientBankInfo.GetAllInvestorBanks({investorId: investor.apikey}, (err, banksInfo) => {
                 if (err) return res.status(500).send(`Error: ${err}`);
                 if (!banksInfo) return res.status(500).send('Investor has no banks account');
@@ -44,7 +46,7 @@ route.post('/login', (req, res) => {
     });
 });
 
-route.put('/update-password/:id', (req, res) => {
+route.put('/update-password/:id', auth, (req, res) => {
     generateHash(req.body.password)
         .then((encryptedPassword) => {
             req.body.password = encryptedPassword;
@@ -62,10 +64,21 @@ route.put('/update-password/:id', (req, res) => {
         });
 });
 
-route.get('/investors', (req, res) => {
+route.get('/investors', auth, (_, res) => {
     Investor.find()
     .then((result) => {res.status(200).send({output: result})})
     .catch((err) => {res.status(500).send(err.message)});
+});
+
+route.post('/token', (req, res) => {
+    Investor.findOne({username: req.body.username}, (err, investor) => {
+        if (err) return res.status(500).send(`Error to find investor: ${req.body.username}`);
+        if (!investor) return res.status(500).send('Non-existent investor');
+
+        const token = createUserToken(investor.id, investor.username, investor.email);
+
+        return res.status(200).send({token: token});
+    });
 });
 
 module.exports = route;
