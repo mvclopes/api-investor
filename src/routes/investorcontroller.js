@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require("uuid");
 const clientBankInfo = require('../client/bankinfo');
 const auth = require('../middleware/auth');
 const createUserToken = require('../utils/createtoken');
+const grpc = require('@grpc/grpc-js');
 
 const route = express.Router();
 
@@ -37,7 +38,11 @@ route.post('/login', (req, res) => {
             if (err) return res.status(500).send(`Error to validate password: ${err.message}`);
             if (!same) return res.status(500).send('Invalid password');
 
-            clientBankInfo.GetAllInvestorBanks({investorId: investor.apikey}, (err, banksInfo) => {
+            const token = createUserToken(investor.id, investor.username, investor.email);
+            const metadata = new grpc.Metadata();
+            metadata.set('token', token);
+
+            clientBankInfo.GetAllInvestorBanks({investorId: investor.apikey}, metadata, (err, banksInfo) => {
                 if (err) return res.status(500).send(`Error: ${err}`);
                 if (!banksInfo) return res.status(500).send('Investor has no banks account');
                 return res.status(200).send(banksInfo);
