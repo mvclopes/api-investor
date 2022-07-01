@@ -3,6 +3,7 @@ const express = require('express');
 const generateHash = require('../utils/generatehash');
 const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require("uuid");
+const clientBankInfo = require('../client/bankinfo');
 
 const route = express.Router();
 
@@ -26,20 +27,19 @@ route.post('/register', (req, res) => {
 });
 
 route.post('/login', (req, res) => {
-    Investor.findOne({username: req.body.username}, (err, result) => {
-        if (err) 
-            return res.status(500).send(`Error to find investor: ${req.body.username}`);
-        if (!result)
-            return res.status(500).send('Non-existent investor');
+    Investor.findOne({username: req.body.username}, (err, investor) => {
+        if (err) return res.status(500).send(`Error to find investor: ${req.body.username}`);
+        if (!investor) return res.status(500).send('Non-existent investor');
         
-        bcrypt.compare(req.body.password, result.password, (err, same) => {
-            if (err)
-                return res.status(500).send(`Error to validate password: ${err.message}`);
-            if (!same)
-                return res.status(500).send('Invalid password');
-
-            // TODO: integrate to MoneyPad API and get all Investor's transactions from DB
-            return res.status(200).send({output: 'You are logged', investor: req.body.username});
+        bcrypt.compare(req.body.password, investor.password, (err, same) => {
+            if (err) return res.status(500).send(`Error to validate password: ${err.message}`);
+            if (!same) return res.status(500).send('Invalid password');
+            
+            clientBankInfo.GetAllInvestorBanks({investorId: investor.apikey}, (err, banksInfo) => {
+                if (err) return res.status(500).send(`Error: ${err}`);
+                if (!banksInfo) return res.status(500).send('Investor has no banks account');
+                return res.status(200).send(banksInfo);
+            });
         });
     });
 });
