@@ -43,7 +43,7 @@ route.post('/login', (req, res) => {
             metadata.set('token', token);
 
             clientBankInfo.GetAllInvestorBanks({investorId: investor.apikey}, metadata, (err, banksInfo) => {
-                if (err) return res.status(500).send(`Error: ${err}`);
+                if (err) return res.status(500).send(err);
                 if (!banksInfo) return res.status(500).send('Investor has no banks account');
                 return res.status(200).send(banksInfo);
             });
