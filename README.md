@@ -19,7 +19,7 @@ API REST desenvolvida para matéria de Desenvolvimento de Microsserviços e APIs
 
 * #### Cadastrar novo investidor
 
-```http
+```
   POST /register
 ```
 
@@ -36,7 +36,7 @@ API REST desenvolvida para matéria de Desenvolvimento de Microsserviços e APIs
 
 * #### Logar 
 
-```http
+```
   POST /login
 ```
 *Exemplo de request*
@@ -49,7 +49,7 @@ API REST desenvolvida para matéria de Desenvolvimento de Microsserviços e APIs
 
 * #### Atualizar informações do investidor 
 
-```http
+```
   PUT /update/{id}
 ```
 
@@ -70,7 +70,7 @@ API REST desenvolvida para matéria de Desenvolvimento de Microsserviços e APIs
 
 * #### Atualizar senha do investidor 
 
-```http
+```
   PUT /update-password/{id}
 ```
 
@@ -86,6 +86,6 @@ API REST desenvolvida para matéria de Desenvolvimento de Microsserviços e APIs
 ```
 * #### Obter todos os investidores cadastrados
 
-```http
+```
   GET /investors
 ```
