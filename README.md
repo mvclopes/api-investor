@@ -1,4 +1,3 @@
-
 # Investor API
 
 API REST desenvolvida para matéria de Desenvolvimento de Microsserviços e APIs da MBA em Mobile Development utilizando NodeJS e ExpressJS.
@@ -15,7 +14,6 @@ API REST desenvolvida para matéria de Desenvolvimento de Microsserviços e APIs
 - Configuração das variáveis do projeto com [dotenv-safe](https://www.npmjs.com/package/dotenv-safe)
 - Logs das requisições HTTPs com [Morgan](https://www.npmjs.com/package/morgan)
 - Configuração segura dos headers com [Helmet](https://www.npmjs.com/package/helmet)
-
 
 ### Endpoints disponíveis
 
@@ -91,4 +89,3 @@ API REST desenvolvida para matéria de Desenvolvimento de Microsserviços e APIs
 ```http
   GET /investors
 ```
-
