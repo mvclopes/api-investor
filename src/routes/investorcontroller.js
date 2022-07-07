@@ -39,14 +39,7 @@ route.post('/login', (req, res) => {
             if (!same) return res.status(500).send('Invalid password');
 
             const token = createUserToken(investor.id, investor.username, investor.email);
-            const metadata = new grpc.Metadata();
-            metadata.set('token', token);
-
-            clientBankInfo.GetAllInvestorBanks({investorId: investor.apikey}, metadata, (err, banksInfo) => {
-                if (err) return res.status(500).send(err);
-                if (!banksInfo) return res.status(500).send('Investor has no banks account');
-                return res.status(200).send(banksInfo);
-            });
+            return res.status(200).send({token: token});
         });
     });
 });
@@ -93,14 +86,19 @@ route.get('/investors', auth, (_, res) => {
     .catch((err) => {res.status(500).send(err.message)});
 });
 
-route.post('/token', (req, res) => {
+route.get('/investor-banks-info', auth, (req, res) => {
     Investor.findOne({username: req.body.username}, (err, investor) => {
         if (err) return res.status(500).send(`Error to find investor: ${req.body.username}`);
         if (!investor) return res.status(500).send('Non-existent investor');
 
-        const token = createUserToken(investor.id, investor.username, investor.email);
+        const metadata = new grpc.Metadata();
+        metadata.set('token', req.headers['token']);
 
-        return res.status(200).send({token: token});
+        clientBankInfo.GetAllInvestorBanks({investorId: investor.apikey}, metadata, (err, banksInfo) => {
+            if (err) return res.status(500).send(err);
+            if (!banksInfo) return res.status(500).send('Investor has no banks account');
+            return res.status(200).send(banksInfo);
+        }); 
     });
 });
 
