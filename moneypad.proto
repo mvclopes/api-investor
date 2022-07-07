@@ -5,12 +5,18 @@ service MoneyPad {
     rpc GetAllInvestorBanks(InvestorId) returns (BankInfoList){}
     rpc GetSpecificBankInfo(BankInfoRequest) returns (BankInfoList){}
     rpc InsertBankInfo(BankInfo) returns (BankInfo){}
+    rpc UpdateBankInfo(UpdateBankInfoRequest) returns (BankInfo){}
 }
 
 message Empty {}
 
 message InvestorId {
     string investorId = 1;
+}
+
+message UpdateBankInfoRequest {
+    string id = 1;
+    BankInfo bankInfo = 2;
 }
 
 message BankInfo {
