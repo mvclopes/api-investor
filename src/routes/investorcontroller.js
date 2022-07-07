@@ -7,6 +7,7 @@ const clientBankInfo = require('../client/bankinfo');
 const auth = require('../middleware/auth');
 const createUserToken = require('../utils/createtoken');
 const grpc = require('@grpc/grpc-js');
+const buildBankInfo = require('../utils/buildbankinfo');
 
 const route = express.Router();
 
@@ -38,7 +39,7 @@ route.post('/login', (req, res) => {
             if (err) return res.status(500).send(`Error to validate password: ${err.message}`);
             if (!same) return res.status(500).send('Invalid password');
 
-            const token = createUserToken(investor.id, investor.username, investor.email);
+            const token = createUserToken(investor);
             return res.status(200).send({token: token});
         });
     });
@@ -100,6 +101,20 @@ route.get('/investor-banks-info', auth, (req, res) => {
             return res.status(200).send(banksInfo);
         }); 
     });
+});
+
+route.post('/new-investor-bank-info', auth, (req, res) => {
+    buildBankInfo(req)
+        .catch((err) => res.status(500).send(err))
+        .then((newBankInfo) => {
+            const metadata = new grpc.Metadata();
+            metadata.set('token', req.headers['token']);
+
+            clientBankInfo.InsertBankInfo(newBankInfo, metadata, (err, bankInfo) => {
+                if (err) return res.status(500).send(err);
+                return res.status(200).send(bankInfo);
+            });
+        });
 });
 
 module.exports = route;
