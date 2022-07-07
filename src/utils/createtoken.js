@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const cfg = require('../config/cfg');
 
-const createUserToken = (userId, username, email) => {
-    return jwt.sign({id: userId, username: username, email: email}, process.env.SECRET, {expiresIn: cfg.jwt_expires});
+const createUserToken = (apikey, username, email) => {
+    return jwt.sign({apikey: apikey, username: username, email: email}, process.env.SECRET, {expiresIn: cfg.jwt_expires});
 };
 
 module.exports = createUserToken;
