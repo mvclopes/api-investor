@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+service MoneyPad {
+    rpc GetAllBanks(Empty) returns (BankInfoList){}
+    rpc GetAllInvestorBanks(InvestorId) returns (BankInfoList){}
+    rpc GetSpecificBankInfo(BankInfoRequest) returns (BankInfoList){}
+    rpc InsertBankInfo(BankInfo) returns (BankInfo){}
+    rpc UpdateBankInfo(UpdateBankInfoRequest) returns (BankInfo){}
+}
+
+message Empty {}
+
+message InvestorId {
+    string investorId = 1;
+}
+
+message UpdateBankInfoRequest {
+    string id = 1;
+    BankInfo bankInfo = 2;
+}
+
+message BankInfo {
+    string bankname = 1;
+    string accounttype = 2;
+    string holdername = 3;
+    string limitcard = 4;
+    string apikey = 5;
+}
+
+message BankInfoRequest {
+    string bankname = 1;
+    string apikey = 2;
+}
+
+message BankInfoList {
+    repeated BankInfo banks = 1;
+}
