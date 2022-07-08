@@ -7,8 +7,7 @@ const clientBankInfo = require('../client/bankinfo');
 const auth = require('../middleware/auth');
 const createUserToken = require('../utils/createtoken');
 const grpc = require('@grpc/grpc-js');
-const buildBankInfo = require('../utils/buildbankinfo');
-const buildUpdateBankInfo = require('../utils/buildupdatebankinfo');
+const build = require('../utils/buildobjects');
 
 const route = express.Router();
 
@@ -105,7 +104,7 @@ route.get('/investor-banks-info', auth, (req, res) => {
 });
 
 route.post('/new-investor-bank-info', auth, (req, res) => {
-    buildBankInfo(req)
+    build.bankInfo(req)
         .catch((err) => res.status(500).send(err))
         .then((newBankInfo) => {
             const metadata = new grpc.Metadata();
@@ -119,7 +118,7 @@ route.post('/new-investor-bank-info', auth, (req, res) => {
 });
 
 route.put('/update-bank-info', auth, (req, res) => {
-    buildUpdateBankInfo(req)
+    build.updateBankInfo(req)
         .catch((err) => res.status(500).send(err))
         .then((updatedBankInfo) => {
             const metadata = new grpc.Metadata();
