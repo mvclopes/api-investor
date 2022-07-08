@@ -26,11 +26,11 @@ API REST desenvolvida para matéria de Desenvolvimento de Microsserviços e APIs
 *Exemplo de request*
 ```
 {
-"username": "user_name",
-"email": "email@email.com",
-"password": "admin",
-"fullname": "Full Name",
-"telephone": "1199999999"
+	"username": "user_name",
+	"email": "email@email.com",
+	"password": "admin",
+	"fullname": "Full Name",
+	"telephone": "1199999999"
 }
 ```
 
