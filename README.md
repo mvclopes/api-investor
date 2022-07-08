@@ -26,11 +26,11 @@ API REST desenvolvida para matéria de Desenvolvimento de Microsserviços e APIs
 *Exemplo de request*
 ```
 {
-	"username": "user_name",
-	"email": "email@email.com",
-	"password": "admin",
-	"fullname": "Full Name",
-	"telephone": "1199999999"
+"username": "user_name",
+"email": "email@email.com",
+"password": "admin",
+"fullname": "Full Name",
+"telephone": "1199999999"
 }
 ```
 
@@ -39,6 +39,7 @@ API REST desenvolvida para matéria de Desenvolvimento de Microsserviços e APIs
 ```
   POST /login
 ```
+
 *Exemplo de request*
 ```
 {
@@ -84,8 +85,55 @@ API REST desenvolvida para matéria de Desenvolvimento de Microsserviços e APIs
 	"password": "newpassword"
 }
 ```
+
 * #### Obter todos os investidores cadastrados
 
 ```
   GET /investors
+```
+
+* #### Obter todas informações bancárias do investidor
+
+```
+  POST /investor-banks-info
+```
+
+*Exemplo de request*
+```
+{
+	"username": "username"
+}
+```
+
+* #### Cadastrar nova informação bancária ao investidor
+
+```
+  POST /new-investor-bank-info
+```
+
+*Exemplo de request*
+```
+{
+	"bankname": "bank name",
+	"accounttype": "account type",
+	"limitcard": "R$ 00,00"
+}
+```
+
+* #### Atualizar informações bancárias do investidor
+
+```
+  POST /update-bank-info
+```
+
+*Exemplo de request*
+```
+{
+	"id": "id",
+	"bankInfo": {
+		"bankname": "bank name",
+		"accounttype": "account type",
+		"limitcard": "R$ 00,00"
+	}
+}
 ```
